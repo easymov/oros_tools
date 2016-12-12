@@ -1,0 +1,57 @@
+<launch>
+  <arg name="port" default="9090" />
+  <arg name="address" default="" />
+  <arg name="certfile" default="$(find oros_tools)/certs/oros.crt"/>
+  <arg name="keyfile" default="$(find oros_tools)/certs/oros.key" />
+
+  <arg name="retry_startup_delay" default="5" />
+
+  <arg name="fragment_timeout" default="600" />
+  <arg name="delay_between_messages" default="0" />
+  <arg name="max_message_size" default="None" />
+
+  <arg name="authenticate" default="false" />
+
+  <group ns="oros">
+
+    <node name="bridge" pkg="rosbridge_server" type="rosbridge_websocket" output="screen">
+      <param name="certfile" value="$(arg certfile)" />
+      <param name="keyfile" value="$(arg keyfile)" />
+      <param name="authenticate" value="$(arg authenticate)" />
+      <param name="port" value="$(arg port)"/>
+      <param name="address" value="$(arg address)"/>
+      <param name="retry_startup_delay" value="$(arg retry_startup_delay)"/>
+      <param name="fragment_timeout" value="$(arg fragment_timeout)"/>
+      <param name="delay_between_messages" value="$(arg delay_between_messages)"/>
+      <param name="max_message_size" value="$(arg max_message_size)"/>
+    </node>
+
+    <node name="api" pkg="rosapi" type="rosapi_node">
+      <remap from="/rosapi/delete_param" to="~delete_param"/>
+      <remap from="/rosapi/get_param" to="~get_param"/>
+      <remap from="/rosapi/get_param_names" to="~get_param_names"/>
+      <remap from="/rosapi/get_time" to="~get_time"/>
+      <remap from="/rosapi/has_param" to="~has_param"/>
+      <remap from="/rosapi/message_details" to="~message_details"/>
+      <remap from="/rosapi/node_details" to="~node_details"/>
+      <remap from="/rosapi/nodes" to="~nodes"/>
+      <remap from="/rosapi/publishers" to="~publishers"/>
+      <remap from="/rosapi/search_param" to="~search_param"/>
+      <remap from="/rosapi/service_host" to="~service_host"/>
+      <remap from="/rosapi/service_node" to="~service_node"/>
+      <remap from="/rosapi/service_providers" to="~service_providers"/>
+      <remap from="/rosapi/service_request_details" to="~service_request_details"/>
+      <remap from="/rosapi/service_response_details" to="~service_response_details"/>
+      <remap from="/rosapi/service_type" to="~service_type"/>
+      <remap from="/rosapi/services" to="~services"/>
+      <remap from="/rosapi/services_for_type" to="~services_for_type"/>
+      <remap from="/rosapi/set_param" to="~set_param"/>
+      <remap from="/rosapi/subscribers" to="~subscribers"/>
+      <remap from="/rosapi/topic_type" to="~topic_type"/>
+      <remap from="/rosapi/topics" to="~topics"/>
+      <remap from="/rosapi/topics_for_type" to="~topics_for_type"/>
+    </node>
+
+  </group>
+
+</launch>
